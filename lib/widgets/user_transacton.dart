@@ -12,7 +12,7 @@ class UserTransactions extends StatefulWidget {
 
 class _UserTransactionsState extends State<UserTransactions> {
   final List<Transaction> _userTransactions = new List<Transaction>.generate(
-    (1),
+    (2),
     (index) => Transaction(
       id: index.toString(),
       title: 'Stuff ${index + 1}',
