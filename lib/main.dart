@@ -1,9 +1,8 @@
-import 'dart:math';
-import 'package:expense_planner/widgets/new_transaction.dart';
 import 'package:flutter/material.dart';
 
 import './models/transaction.dart';
 import './widgets/transaction_list.dart';
+import './widgets/new_transaction.dart';
 
 void main() => runApp(MyApp());
 
@@ -44,16 +43,17 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final List<Transaction> _userTransactions = new List<Transaction>.generate(
-    (2),
-    (index) => Transaction(
-      id: index.toString(),
-      title: 'Stuff ${index + 1}',
-      amount: Random().nextInt(90000) + 10000,
-      date: DateTime.now(),
-    ),
-  );
+  // final List<Transaction> _userTransactions = new List<Transaction>.generate(
+  //   (2),
+  //   (index) => Transaction(
+  //     id: index.toString(),
+  //     title: 'Stuff ${index + 1}',
+  //     amount: Random().nextInt(90000) + 10000,
+  //     date: DateTime.now(),
+  //   ),
+  // );
 
+  final List<Transaction> _userTransactions = [];
   void _addNewTrasaction(String txTitle, int txAmount) {
     final newTx = Transaction(
       id: DateTime.now().toString(),
