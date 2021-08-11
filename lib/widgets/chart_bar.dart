@@ -13,10 +13,15 @@ class ChartBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Text(
-          NumberFormat.compact(
-            locale: Platform.localeName,
-          ).format(spendingAmount),
+        Container(
+          height: 20,
+          child: FittedBox(
+            child: Text(
+              NumberFormat.compact(
+                locale: Platform.localeName,
+              ).format(spendingAmount),
+            ),
+          ),
         ),
         SizedBox(
           height: 4,
