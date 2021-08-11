@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 import './models/transaction.dart';
 import './widgets/transaction_list.dart';
 import './widgets/new_transaction.dart';
+import './widgets/chart.dart';
 
 void main() => runApp(MyApp());
 
@@ -54,7 +56,16 @@ class _MyHomePageState extends State<MyHomePage> {
   // );
 
   final List<Transaction> _userTransactions = [];
-  void _addNewTrasaction(String txTitle, int txAmount) {
+
+  List<Transaction> get _recentTransactions {
+    return _userTransactions.where((tx) {
+      return tx.date.isAfter(
+        DateTime.now().subtract(Duration(days: 7)),
+      );
+    }).toList();
+  }
+
+  void _addNewTrasaction(String txTitle, double txAmount) {
     final newTx = Transaction(
       id: DateTime.now().toString(),
       title: txTitle,
@@ -81,6 +92,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    initializeDateFormatting();
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Expense Planner'),
@@ -95,14 +108,7 @@ class _MyHomePageState extends State<MyHomePage> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Container(
-              width: double.infinity,
-              margin: EdgeInsets.only(left: 10, right: 10),
-              child: Card(
-                child: Text('CHART'),
-                elevation: 5,
-              ),
-            ),
+            Chart(_recentTransactions),
             TransactionList(_userTransactions),
           ],
         ),

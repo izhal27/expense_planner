@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:intl/date_symbol_data_local.dart';
 
 import '../models/transaction.dart';
 
@@ -12,9 +11,6 @@ class TransactionList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var defaultLocale = Platform.localeName;
-    initializeDateFormatting();
-
     return Container(
       height: 350,
       child: transactions.isEmpty
@@ -39,45 +35,35 @@ class TransactionList extends StatelessWidget {
           : ListView.builder(
               itemBuilder: (ctx, index) {
                 return Card(
-                  child: Row(
-                    children: [
-                      Container(
-                        margin: EdgeInsets.symmetric(
-                          horizontal: 15,
-                          vertical: 10,
-                        ),
-                        decoration: BoxDecoration(
-                            border: Border.all(
-                          color: Theme.of(context).primaryColor,
-                          width: 2,
-                        )),
-                        padding: EdgeInsets.all(10),
-                        child: Text(
-                          NumberFormat.currency(locale: defaultLocale)
-                              .format(transactions[index].amount),
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20,
-                            color: Theme.of(context).primaryColor,
-                          ),
+                  elevation: 5,
+                  margin: EdgeInsets.symmetric(
+                    vertical: 8,
+                    horizontal: 5,
+                  ),
+                  child: ListTile(
+                    leading: CircleAvatar(
+                      radius: 30,
+                      child: Padding(
+                        padding: EdgeInsets.all(6),
+                        child: FittedBox(
+                          child: Text(NumberFormat.compactSimpleCurrency(
+                                  locale: Platform.localeName)
+                              .format(
+                            transactions[index].amount,
+                          )),
                         ),
                       ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            transactions[index].title,
-                            style: Theme.of(context).textTheme.headline1,
-                          ),
-                          Text(
-                            DateFormat.yMMMMd(defaultLocale)
-                                .add_jm()
-                                .format(transactions[index].date),
-                            style: TextStyle(color: Colors.grey),
-                          ),
-                        ],
-                      )
-                    ],
+                    ),
+                    title: Text(
+                      transactions[index].title,
+                      style: Theme.of(context).textTheme.headline1,
+                    ),
+                    subtitle: Text(
+                      DateFormat.yMMMMd(Platform.localeName)
+                          .add_jm()
+                          .format(transactions[index].date),
+                      style: TextStyle(color: Colors.grey),
+                    ),
                   ),
                 );
               },

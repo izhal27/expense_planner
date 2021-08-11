@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class NewTransaction extends StatefulWidget {
-  final Function(String, int) addTransactionHandler;
+  final Function(String, double) addTransactionHandler;
 
   NewTransaction(this.addTransactionHandler);
 
@@ -15,7 +15,7 @@ class _NewTransactionState extends State<NewTransaction> {
 
   void _submitData() {
     final enteredTitle = titleController.text;
-    final enteredAmount = int.parse(amountController.text);
+    final enteredAmount = double.parse(amountController.text);
 
     if (enteredTitle.isEmpty || enteredAmount <= 0) {
       return;
