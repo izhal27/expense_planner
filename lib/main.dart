@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:uuid/uuid.dart';
 
 import './models/transaction.dart';
 import './widgets/transaction_list.dart';
@@ -17,6 +18,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.red,
         accentColor: Colors.amber,
+        errorColor: Colors.red,
         fontFamily: 'Quicksand',
         textTheme: ThemeData.light().textTheme.copyWith(
               headline1: TextStyle(
@@ -45,16 +47,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  // final List<Transaction> _userTransactions = new List<Transaction>.generate(
-  //   (2),
-  //   (index) => Transaction(
-  //     id: index.toString(),
-  //     title: 'Stuff ${index + 1}',
-  //     amount: Random().nextInt(90000) + 10000,
-  //     date: DateTime.now(),
-  //   ),
-  // );
-
   final List<Transaction> _userTransactions = [];
 
   List<Transaction> get _recentTransactions {
@@ -65,12 +57,16 @@ class _MyHomePageState extends State<MyHomePage> {
     }).toList();
   }
 
-  void _addNewTrasaction(String txTitle, double txAmount) {
+  void _addNewTrasaction(
+    String txTitle,
+    double txAmount,
+    DateTime selectedDate,
+  ) {
     final newTx = Transaction(
-      id: DateTime.now().toString(),
+      id: Uuid().v4(),
       title: txTitle,
       amount: txAmount,
-      date: DateTime.now(),
+      date: selectedDate,
     );
 
     setState(() {
@@ -78,16 +74,17 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  void _deleteTransaction(String id) {
+    setState(() {
+      _userTransactions.removeWhere((element) => element.id == id);
+    });
+  }
+
   void _startAddNewUserTransaction(BuildContext ctx) {
     showModalBottomSheet(
-        context: ctx,
-        builder: (_) {
-          return GestureDetector(
-            // onTap: () {},
-            child: NewTransaction(_addNewTrasaction),
-            // behavior: HitTestBehavior.opaque,
-          );
-        });
+      context: ctx,
+      builder: (_) => NewTransaction(_addNewTrasaction),
+    );
   }
 
   @override
@@ -109,7 +106,10 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           children: [
             Chart(_recentTransactions),
-            TransactionList(_userTransactions),
+            TransactionList(
+              _userTransactions.reversed.toList(),
+              _deleteTransaction,
+            ),
           ],
         ),
       ),
