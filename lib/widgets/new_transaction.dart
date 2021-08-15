@@ -3,10 +3,12 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import './adaptive_text_button.dart';
+
 class NewTransaction extends StatefulWidget {
   final Function(String, double, DateTime) addTransactionHandler;
 
-  NewTransaction(this.addTransactionHandler);
+  const NewTransaction(this.addTransactionHandler);
 
   @override
   _NewTransactionState createState() => _NewTransactionState();
@@ -51,53 +53,53 @@ class _NewTransactionState extends State<NewTransaction> {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(10),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            TextField(
-              decoration: InputDecoration(labelText: 'Title'),
-              autofocus: true,
-              controller: _titleController,
-              onSubmitted: (_) => _submitData(),
-            ),
-            TextField(
-              decoration: InputDecoration(
-                labelText: 'Amount',
+    return SingleChildScrollView(
+      child: Card(
+        child: Padding(
+          padding: EdgeInsets.only(
+            left: 10,
+            top: 10,
+            right: 10,
+            bottom: MediaQuery.of(context).viewInsets.bottom + 10,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              TextField(
+                decoration: const InputDecoration(labelText: 'Title'),
+                autofocus: true,
+                controller: _titleController,
+                onSubmitted: (_) => _submitData(),
               ),
-              keyboardType: TextInputType.number,
-              controller: _amountController,
-              enableInteractiveSelection: false,
-              onSubmitted: (_) => _submitData(),
-            ),
-            Container(
-              height: 70,
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      'Picked Date: ${DateFormat.yMMMMd(Platform.localeName).format(_selectedDate)}',
-                    ),
-                  ),
-                  TextButton(
-                    onPressed: _presentDatePicker,
-                    child: Text(
-                      'Choose Date',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
+              TextField(
+                decoration: const InputDecoration(labelText: 'Amount'),
+                keyboardType: TextInputType.number,
+                controller: _amountController,
+                enableInteractiveSelection: false,
+                onSubmitted: (_) => _submitData(),
+              ),
+              Container(
+                height: 70,
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        'Picked Date: ${DateFormat.yMMMMd(Platform.localeName).format(_selectedDate)}',
                       ),
                     ),
-                  )
-                ],
+                    AdaptiveTextButton(
+                      'Choose Date',
+                      _presentDatePicker,
+                    )
+                  ],
+                ),
               ),
-            ),
-            ElevatedButton(
-              child: Text('Add Transaction'),
-              onPressed: _submitData,
-            )
-          ],
+              ElevatedButton(
+                child: const Text('Add Transaction'),
+                onPressed: _submitData,
+              )
+            ],
+          ),
         ),
       ),
     );
